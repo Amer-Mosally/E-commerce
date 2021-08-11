@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<br>
+
+{% for x in object_list %}
+    <ol><a href="{% url 'DetailView' x.id %}"> <!-- inside {%  we can call django url --> <h1>{{x.item}}</h1>  </a>
+
+    {% if user.is_authenticated %}
+        {% if user.id == x.owner.id %}
+
+            <small><a href="{% url 'Edit_list' x.pk %}"> (Edit) </a></small> <small><a href="{% url 'Delete_list' x.pk %}"> (Delete) </a></small>
+
+        {% endif %}
+    {% endif %}
+    <br>
+    Started on: {{x.time}}
+    <br>
+    Category: <a href="{% url 'Category' x.category %}">  {{x.category}}  </a>
+    <br>
+    Current Bid: {{x.price}} US$
+    </ol>
+    <br><br>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title%} Category {% endblock %}
+
+{% block body %}
+{% if category_posts %}
+
+    <h1>Catergory: {{cats}} </h1>
+
+    <ul>
+    {% for x in category_posts %}
+            <ol>
+            <a href="{% url 'DetailView' x.pk %}"> <!-- inside {%  we can call django url -->
+            {% if user.is_authenticated %}
+            <h1>{{x.item}}</h1>   <small><a href="{% url 'Edit_list' x.pk %}"> (Edit) </a></small> <small><a href="{% url 'Delete_list' x.pk %}"> (Delete) </a></small>
+            {% endif %}
+            </a>
+            <br>
+            Started on: {{x.time}}
+            <br>
+            Category: {{x.category}}
+            <br>
+            {{x.image}}
+            <br>
+            Current Bid: {{x.price}} US$
+            </ol>
+        <br><br>
+    {% endfor %}
+    </ul>
+{% else %}
+    <h1>The page not found ERORR 404</h1>
+{% endif %}
+{% endblock %}

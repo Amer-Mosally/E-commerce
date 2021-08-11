@@ -1,0 +1,17 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+  <h1 class="d-flex p-2">Watchlist:</h1>
+
+  
+  {% for listing in watchlist %}
+            <br>
+
+            <div >
+                <h4 >{{ listing.listing.item }}</h4>
+                <a href="{% url 'DetailView' listing.listing.pk %}" type="submit" class="btn btn-primary">See more...</a>
+            </div>
+        </div>
+    </div>
+  {% endfor %}
+{% endblock %}

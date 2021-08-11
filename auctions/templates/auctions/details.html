@@ -1,0 +1,85 @@
+{% extends "auctions/layout.html" %}
+
+
+
+{% block body %}
+
+  {% if listing.closed %}
+    <div class="alert alert-danger" role="alert">
+      The bid is closed
+    </div>
+    <br>
+    {%  if   user is  winner  %}
+    
+      <div class="alert alert-success " role="alert">
+        <h1>Congratulation, You Won! </h1>
+      </div>
+    {% endif %}
+  {% endif %}
+  <br><br><br>
+  <h1>{{listing.item}}</h1>
+  <h4><br>Category: {{listing.category}}<br>Created by: {{listing.owner.first_name}} {{listing.owner.last_name}} ({{listing.owner}})<br></h4>
+  ({{listing.time}})
+  <br><br><br>
+  {% if listing.image %}
+  <img style = "width: 50vw" src="{{listing.image.url}}"></img>
+  {% endif %}
+  <br><br>
+  <h3>Description: {{listing.description}}</h3>
+  <br>
+  <h4>Starting Bid: {{listing.price}} US$</h4>
+  <h4>Current Bid: {{highest_bid}} US$</h4>
+{% if not listing.closed and user.id != listing.owner.id %}
+  <form action="{% url 'DetailView' listing.pk %}" method = "POST">
+      {% csrf_token %}
+      <input type="number" name = "bid_price" class="form-group" placeholder = 'It must be greate than '>
+      <button class="btn btn-success" type="submit">Bid</button>
+  </form>
+{% endif %}
+  <br><br>
+  {% if user.is_authenticated %}
+    {% if user.id == listing.owner.id and not listing.closed %}
+      <a href="{% url 'Edit_list' listing.pk %}" class="btn btn-primary btn-md my-0 p"> Edit </a>   
+      {% endif %}
+      <a href="{% url 'index' %}" class="btn btn-primary btn-md my-0 p"> Back</a> 
+      <br><br>
+    {% if user.id == listing.owner.id and not listing.closed %}
+      <form action="{% url 'close' listing.pk %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" name="button" class="btn btn-danger" value="Close">End the Auction</button>
+      </form>
+    {% endif %}
+  {% endif %}
+  <br><br>    
+{% if user.id == listing.owner.id and not listing.closed %}
+    <small><a href="{% url 'Delete_list' listing.pk %}" class="btn btn-danger btn-md my-0 p"> Delete </a></small>
+{% endif %}
+  <br><br>
+  <form action="{% url 'DetailView' listing.pk %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" name="button" value="Watchlist" class="btn btn-primary"><span class="badge badge-primary">Add to Watchlist!</span></button>
+  </form>
+  <br><br>
+  <h2>Comments:</h2>
+  <br>
+  {% if not listing.comments.all %}
+    No Comment yet, fell free to comment...
+    <br>
+    <a href=" {% url 'add_comment' listing.pk %} "> Add Comment</a>
+  {% else %}
+    <a href="{% url 'add_comment' listing.pk %}"> Add Comment</a>
+  <br><br>
+    {% for comment in listing.comments.all %}
+      Title: {{ comment.title }}    
+      <br>
+      <strong>
+
+      {{comment.date}}
+      </strong>
+      <br>
+      {{ comment.body }}
+      <br><br><br><br>
+    {%endfor%}
+  {% endif %}
+  
+{% endblock %}

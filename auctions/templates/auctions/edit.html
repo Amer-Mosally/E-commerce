@@ -1,0 +1,25 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title%} Edit Listing {% endblock %}
+
+{% block body %}
+
+
+<h2 style="text-align:left">Edit The List: </h2>
+
+{% if user.is_authenticated %}
+  {% if user.id == listing.owner.id %}
+    <div class=" ">
+    <form method="POST" enctype="multipart/form-data">
+        <br><br>
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button class="btn btn-success" > Update </button>
+    </form>
+    </div>
+
+  {% endif %}
+{% endif %}
+
+
+{% endblock %}

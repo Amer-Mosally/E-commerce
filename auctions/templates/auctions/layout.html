@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head >
+        <title>{% block title %}Auctions{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+       <style>
+        div.a {
+         text-align: right;
+         padding-left: 50px;
+         padding-top: 1px;
+            }
+        </style>
+    </head>
+
+    <body style="background-color:#F5F5F5;text-align:center;" >
+    <div class="text-muted">
+        <h1 style="text-align:center; ">Auctions</h1>
+    </div>
+        <div>
+            {% if user.is_authenticated %}
+                Welcome  <strong>{{ user.username }}</strong>.
+            {% else %}
+                Not signed in.
+            {% endif %}
+        </div>
+
+        <nav class="nabar navbar-expand-lg navbar-dark bg-dark ">
+        <ul class="navbar-nav mr-auto  navbar-dark ">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+            </li>
+             {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist <span class="badge badge-secondary">{{ user.watchlist.count }}</span></a>
+                </li>
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'new_listing' %}">Create Listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Log Out </a>
+                </li>
+                
+                <div class="a">
+                <form class="form-inline">                                     
+                
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                </form>
+                </div>
+
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                
+            {% endif %}
+        </ul>
+        </nav>
+        <hr>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>
